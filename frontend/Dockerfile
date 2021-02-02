@@ -1,7 +1,6 @@
-FROM node:12.16.2
+FROM node:12.16.2-slim
 
 ADD . /frontend/
 WORKDIR /frontend
 
-RUN npm install --only prod
 CMD npm start
