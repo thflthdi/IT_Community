@@ -1,0 +1,5 @@
+.idea
+boardlib
+Dockerfile
+db.sqlite3
+__pycache__
