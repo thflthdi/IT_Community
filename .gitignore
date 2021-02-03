@@ -3,7 +3,9 @@
 boardlib
 db.sqlite3
 run_dev.sh
+lib_run_dev.sh
 __pycache__
+migrations
 
 # FRONT END
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
