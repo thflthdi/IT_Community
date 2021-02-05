@@ -1,5 +1,6 @@
+from django.contrib.auth.hashers import make_password
 from rest_framework import viewsets, status
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import User
@@ -22,12 +23,8 @@ class CustomAllowAny(BasePermission):
 
 class UserViewSet(viewsets.ModelViewSet):
     '''
-    list : Allow Any
-    Retrieve : Allow Any
-    Create : 인증된 회원만 못하게
-    Update : IsAuth
-    p_update : IsAuth
-    Destroy : IsAuth
+    비회원 : list, retrieve 읽기가능, post 가능
+    회원 : post 불가능, 각자 본인 오브젝트에 대해서 모든 권한(list, retrieve, put, patch, delete)
     '''
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -43,6 +40,6 @@ class UserViewSet(viewsets.ModelViewSet):
             ipaddress = x_forwarded_for.split(',')[-1].strip()
         else:
             ipaddress = self.request.META.get('REMOTE_ADDR')
-        serializer.save(client_ip=ipaddress)
 
-        return super().perform_create(serializer)
+        serializer.save(client_ip=ipaddress,
+                        password=make_password(serializer.validated_data["password"]))
