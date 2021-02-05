@@ -1,7 +1,6 @@
 from django.contrib.auth.hashers import make_password
-from rest_framework import viewsets, status
-from rest_framework.permissions import BasePermission, IsAuthenticated
-from rest_framework.response import Response
+from rest_framework import viewsets
+from rest_framework.permissions import BasePermission
 
 from .models import User
 from .serializers import UserSerializer
@@ -9,29 +8,32 @@ from .serializers import UserSerializer
 
 class CustomAuthenticated(BasePermission):
     def has_permission(self, request, view):
+        # 비회원 GET, POST 권한 부여
+        if not request.user.is_authenticated and request.method in ('GET', 'POST',):
+            return True
+
+        # 회원은 POST 불가능
         return bool(
-            not request.method in ('POST',) and
+            request.method not in ('POST',) and
             request.user and
             request.user.is_authenticated
         )
 
-
-class CustomAllowAny(BasePermission):
-    def has_permission(self, request, view):
-        return request.method in ('GET', 'POST',) and not request.user.is_authenticated
+    def has_object_permission(self, request, view, obj):
+        # 본인 오브젝트에 한하여 모든 권한 부여
+        if request.method in ('PUT', 'PATCH', 'DELETE',):
+            return obj == request.user
+        return True
 
 
 class UserViewSet(viewsets.ModelViewSet):
     '''
     비회원 : list, retrieve 읽기가능, post 가능
-    회원 : post 불가능, 각자 본인 오브젝트에 대해서 모든 권한(list, retrieve, put, patch, delete)
+    회원 : list, retrieve, 읽기 가능, post 불가능, 각자 본인 오브젝트에 대해서만 모든 권한(put, patch, delete)
     '''
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [CustomAuthenticated | CustomAllowAny]
-
-    # def list(self, request, *args, **kwargs):
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
+    permission_classes = [CustomAuthenticated]
 
     def perform_create(self, serializer):
         # client_ip 파싱후 추가
@@ -41,5 +43,6 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             ipaddress = self.request.META.get('REMOTE_ADDR')
 
+        # password 암호화 저장
         serializer.save(client_ip=ipaddress,
                         password=make_password(serializer.validated_data["password"]))
