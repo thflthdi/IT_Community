@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'drf_yasg',
 
     'accounts',
 ]
@@ -137,4 +138,8 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': timedelta(hours=1),
     'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=1),
     # 'JWT_VERIFY_EXPIRATION': False,
+}
+
+SWAGGER_SETTINGS = {
+    'VALIDATOR_URL': 'http://localhost:8080',
 }
