@@ -44,7 +44,7 @@ class BoardViewSet(ModelViewSet):
 class BoardSearchView(ListAPIView):
     '''
     게시판 검색.
-    제목 + 내용 기반으로 검색
+    title + content 기반으로 검색
     '''
     queryset = Board.objects.all()
     serializer_class = BoardSerializer

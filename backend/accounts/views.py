@@ -20,7 +20,7 @@ class UserAuthenticated(BasePermission):
         )
 
     def has_object_permission(self, request, view, obj):
-        # 본인 오브젝트에 한하여 모든 권한 부여
+        # 단, 본인 오브젝트에 한하여 수정, 삭제 권한 부여
         if request.method in ('PUT', 'PATCH', 'DELETE',):
             return obj == request.user
         return True
