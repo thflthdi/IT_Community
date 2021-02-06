@@ -1,4 +1,6 @@
 from django.contrib.auth.hashers import make_password
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.permissions import BasePermission
 
@@ -28,6 +30,8 @@ class UserAuthenticated(BasePermission):
 
 class UserViewSet(viewsets.ModelViewSet):
     '''
+    회원 CRUD
+
     비회원 : list, retrieve 읽기가능, post 가능
     회원 : list, retrieve, 읽기 가능, post 불가능, 각자 본인 오브젝트에 대해서만 모든 권한(put, patch, delete)
     '''
@@ -46,3 +50,21 @@ class UserViewSet(viewsets.ModelViewSet):
         # password 암호화 저장
         serializer.save(client_ip=ipaddress,
                         password=make_password(serializer.validated_data["password"]))
+
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('Authorization', openapi.IN_HEADER, description="입력: 'JWT [token값]'",
+                          type=openapi.TYPE_STRING)])
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('Authorization', openapi.IN_HEADER, description="입력: 'JWT [token값]'",
+                          type=openapi.TYPE_STRING)])
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('Authorization', openapi.IN_HEADER, description="입력: 'JWT [token값]'",
+                          type=openapi.TYPE_STRING)])
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
