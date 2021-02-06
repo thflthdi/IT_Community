@@ -1,4 +1,7 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from django.db.models import Q
+from rest_framework import status
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import BasePermission, SAFE_METHODS, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -36,3 +39,21 @@ class BoardViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class BoardSearchView(ListAPIView):
+    '''
+    게시판 검색.
+    제목 + 내용 기반으로 검색
+    '''
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get('query', '').strip()
+        if query:
+            self.queryset = self.queryset.filter(Q(title__icontains=query) | Q(content__icontains=query))
+            return super().get(request, *args, **kwargs)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
