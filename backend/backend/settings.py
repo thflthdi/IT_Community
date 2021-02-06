@@ -38,13 +38,16 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_yasg',
+    'corsheaders',
 
     'accounts',
+    'board',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -143,3 +146,5 @@ JWT_AUTH = {
 SWAGGER_SETTINGS = {
     'VALIDATOR_URL': 'http://localhost:8080',
 }
+
+CORS_ALLOW_ALL_ORIGINS = True

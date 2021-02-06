@@ -6,7 +6,7 @@ from .models import User
 from .serializers import UserSerializer
 
 
-class CustomAuthenticated(BasePermission):
+class UserAuthenticated(BasePermission):
     def has_permission(self, request, view):
         # 비회원 GET, POST 권한 부여
         if not request.user.is_authenticated and request.method in ('GET', 'POST',):
@@ -20,7 +20,7 @@ class CustomAuthenticated(BasePermission):
         )
 
     def has_object_permission(self, request, view, obj):
-        # 본인 오브젝트에 한하여 모든 권한 부여
+        # 단, 본인 오브젝트에 한하여 수정, 삭제 권한 부여
         if request.method in ('PUT', 'PATCH', 'DELETE',):
             return obj == request.user
         return True
@@ -33,7 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):
     '''
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [CustomAuthenticated]
+    permission_classes = [UserAuthenticated]
 
     def perform_create(self, serializer):
         # client_ip 파싱후 추가
