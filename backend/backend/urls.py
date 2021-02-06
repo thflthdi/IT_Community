@@ -23,10 +23,8 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Snippets API",
         default_version='v1',
-        description="Test description",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
-        license=openapi.License(name="BSD License"),
+        description="백엔드 개발자를 찾지 말라고 만든거임",
+        terms_of_service="https://github.com/thflthdi/IT_Community/",
     ),
     validators=['flex', 'ssv'],
     public=True,
@@ -40,4 +38,5 @@ urlpatterns = [
     path('api/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    path('board/', include('board.urls')),
 ]
