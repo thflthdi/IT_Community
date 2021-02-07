@@ -1,26 +1,52 @@
-import React, { useReducer } from 'react';
+import React, { createContext, useContext } from "react";
+import useReducerWithSideEffects, {
+  Update,
+  UpdateWithSideEffect,
+} from 'use-reducer-with-side-effects';
+import { getStorageItem, setStorageItem } from "./component/hook/useLocalStorage";
 
-const initialState= {
-    pk : -1
-}
-const reducer = (state, action)=> {
+const AppContext = createContext();
 
-    switch (action.type) {
-        case "SET_PK" :
-          return {
-            ...state, //현재 state가 하나뿐이라 생략해도 된다. 두개 이상일 경우 변경하지 않은 state를 유지하기 위해 사용한다
-            pk: action.value,
-          };
-    }   
+const reducer = (prevState, action) => {
+  const { type } = action;
+  if (type === SET_TOKEN) {
+    const { payload: jwtToken} = action;
+    const newState = { ...prevState, jwtToken};
+    return UpdateWithSideEffect(newState, (state, dispatch) => {
+      setStorageItem("jwtToken", jwtToken);
+    });
+    }else if(type === SET_PK){
+      const {payload:pk} = action;
+      const newState = {...prevState, pk};
+      return Update(newState);
+    }
 }
-export const PKContext = React.createContext();
 
-const ContextProvider = ({children}) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
-    return(
-        <PKContext.Provider value={{ pk: state.pk, dispatch }}>
-            {children}
-        </PKContext.Provider>
-    )
-}
-export default ContextProvider;
+export const AppProvider = ({ children }) => {
+  const jwtToken = getStorageItem("jwtToken", "");
+  const [store, dispatch] = useReducerWithSideEffects(reducer, {
+    jwtToken,
+    pk:-1,
+  });
+  return (
+    <AppContext.Provider value={{ store, dispatch }}>
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+export const useAppContext = () => useContext(AppContext);
+
+// Actions
+const SET_TOKEN = "APP/SET_TOKEN";
+const SET_PK = "APP/SET_PK";
+
+// Action Creators
+export const setToken = (token) => ({
+  type: SET_TOKEN,
+  payload: token,
+})
+export const setPK = (pk) => ({
+  type: SET_PK,
+  payload: pk,
+})

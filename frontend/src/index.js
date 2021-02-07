@@ -2,15 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import ContextProvider from './store';
+import { AppProvider} from './store';
+
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ContextProvider>
-    <App/>
-    </ContextProvider>
-  </React.StrictMode>,
+  <AppProvider>
+    <React.StrictMode>
+        <App/>
+    </React.StrictMode>
+  </AppProvider>,
   document.getElementById('root')
 );
 

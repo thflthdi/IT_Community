@@ -3,6 +3,7 @@ import axios from 'axios';
 import Login from '../component/auth/login';
 import Join from '../component/auth/join'
 import Logout from '../component/auth/logout';
+import UserDel from '../component/auth/userdele';
 function Auth(){
     const [users,setUsers]=useState([]);
 
@@ -32,7 +33,8 @@ function Auth(){
         <Login></Login>
         <Join></Join>
         <Logout/>
-
+        <hr/>
+        <UserDel></UserDel>
     </ul>
     )
 }

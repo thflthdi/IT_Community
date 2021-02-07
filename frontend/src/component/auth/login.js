@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { getStorageItem, setStorageItem } from "../hook/useLocalStorage";
-
+import { setPK, setToken, useAppContext } from '../../store';
 
 function Login(){
     const [loginid,setLoginid]=useState('');
     const [loginpw,setLoginpw]=useState('');
     const [username,setUsername]=useState('');
-
+    const {
+        store: { jwtToken, pk },
+        dispatch,
+      } = useAppContext();
     const login = () => {
         const loginUser = async () => {
             try{
                 const response = await axios.post('http://localhost:8080/accounts/token/',{username:loginid,password:loginpw});
                 console.log(response.data)
-                setStorageItem('jwtToken',response.data.token)
-                setUsername(loginid)
+                dispatch(setToken(response.data.token))
+                dispatch(setPK(response.data.user.pk))
+                setUsername(response.data.user.username)
             }catch(e){
                 console.log(e)
             }
