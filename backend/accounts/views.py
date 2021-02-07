@@ -68,3 +68,10 @@ class UserViewSet(viewsets.ModelViewSet):
                           type=openapi.TYPE_STRING)])
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
+
+
+def jwt_response_payload_handler(token, user=None, request=None):
+    return {
+        'token': token,
+        'user': UserSerializer(user, context={'request': request}).data
+    }
