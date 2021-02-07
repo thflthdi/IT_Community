@@ -143,8 +143,5 @@ JWT_AUTH = {
     # 'JWT_VERIFY_EXPIRATION': False,
 }
 
-SWAGGER_SETTINGS = {
-    'VALIDATOR_URL': 'http://localhost:8080',
-}
 
 CORS_ALLOW_ALL_ORIGINS = True

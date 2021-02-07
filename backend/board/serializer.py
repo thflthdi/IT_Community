@@ -8,3 +8,7 @@ class BoardSerializer(serializers.ModelSerializer):
         model = Board
         fields = ['pk', 'title', 'content', 'user', 'created_at', 'updated_at']
         read_only_fields = ['user']
+
+
+class BoardQuerySerializer(serializers.Serializer):
+    query = serializers.CharField(help_text="제목과 내용으로 검색", required=False)
