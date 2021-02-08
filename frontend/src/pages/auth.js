@@ -4,9 +4,10 @@ import Login from '../component/auth/login';
 import Join from '../component/auth/join'
 import Logout from '../component/auth/logout';
 import UserDel from '../component/auth/userdele';
+import UserUpdate from '../component/auth/userupdate';
+import { Link} from 'react-router-dom';
 function Auth(){
     const [users,setUsers]=useState([]);
-
     useEffect(()=>{
         const fetchUsers= async ()=>{
             try{
@@ -19,23 +20,28 @@ function Auth(){
         }
         fetchUsers();
     }, [])
-    //users가 바뀔 때 마다 useEffect 실행
-
-    
     return(
-    <ul>
-        {users.map(user => (
-        <li key={user.pk}>
-          {user.username} ({user.created_at})
-        </li>
-      ))}
-      <hr/>
-        <Login></Login>
-        <Join></Join>
-        <Logout/>
-        <hr/>
-        <UserDel></UserDel>
-    </ul>
+        <div>
+            <hr/>
+                <ul>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/auth/login">Login</Link></li>
+                    <li><Link to="/auth/join">Join</Link></li>
+                    {users.map(user => (
+                    <li key={user.pk}>
+                    {user.username} ({user.created_at})
+                    </li>
+                ))}
+                <hr/>
+                    <Login></Login>
+                    <Join></Join>
+                    <Logout/>
+                    <hr/>
+                    <UserDel></UserDel>
+                    <UserUpdate></UserUpdate>
+                </ul>
+        </div>
+        
     )
 }
 export default Auth;

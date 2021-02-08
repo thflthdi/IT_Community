@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { useAppContext } from '../../store';
+import { setToken, useAppContext } from '../../store';
 
 function UserDel(){
     const {
@@ -13,6 +13,7 @@ function UserDel(){
             const headers = { Authorization: `JWT ${jwtToken}` };
             const response = await axios.delete(`http://localhost:8080/accounts/users/${pk}/`, { headers })
             console.log(response.data)
+            dispatch(setToken(''))
         }catch(e){
             console.log(e)
         }

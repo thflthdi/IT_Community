@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Join(){
     const [userid,setUserid]=useState('');
@@ -20,6 +21,7 @@ function Join(){
     }
     return(
         <ul>
+            <li><Link to="/">Home</Link></li>
             회원가입 Page
             <li>id:<input name="userid" value={userid} onChange={(e)=>setUserid(e.target.value)}/></li>
             <li>PW:<input type="password" name="userpw" value={userpw} onChange={(e)=>setUserpw(e.target.value)}/></li>

@@ -1,13 +1,15 @@
 import React from 'react';
-import { getStorageItem, setStorageItem } from "../hook/useLocalStorage";
+import { setToken, useAppContext } from '../../store';
+
 
 function Logout(){
-
+    const {
+        dispatch,
+      } = useAppContext();
     const logoutUser = () => {
-        setStorageItem('jwtToken','')
-        console.log(getStorageItem('jwtToken'))
+        dispatch(setToken(''))
     }
-
+    
     return(
         <>  
             <button onClick={logoutUser}>로그아웃</button>

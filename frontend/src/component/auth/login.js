@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { setPK, setToken, useAppContext } from '../../store';
+import { setPK, setToken, setUsername, useAppContext } from '../../store';
+import { Link } from 'react-router-dom';
 
 function Login(){
     const [loginid,setLoginid]=useState('');
     const [loginpw,setLoginpw]=useState('');
-    const [username,setUsername]=useState('');
     const {
-        store: { jwtToken, pk },
+        store:{name},
         dispatch,
       } = useAppContext();
     const login = () => {
@@ -17,7 +17,7 @@ function Login(){
                 console.log(response.data)
                 dispatch(setToken(response.data.token))
                 dispatch(setPK(response.data.user.pk))
-                setUsername(response.data.user.username)
+                dispatch(setUsername(response.data.user.username))
             }catch(e){
                 console.log(e)
             }
@@ -26,8 +26,8 @@ function Login(){
     }
     return(
         <ul>
+            <li><Link to="/">Home</Link></li>
             Login Page
-            <li>현재유저 : {username}</li>
           <li>id:<input name="loginid" value={loginid} onChange={(e)=>setLoginid(e.target.value)}/></li>
           <li>PW:<input type="password" name="loginpw" value={loginpw} onChange={(e)=>setLoginpw(e.target.value)}/></li>
           <li><button onClick={login}>로그인</button></li>

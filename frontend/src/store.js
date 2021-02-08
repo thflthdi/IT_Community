@@ -19,6 +19,10 @@ const reducer = (prevState, action) => {
       const {payload:pk} = action;
       const newState = {...prevState, pk};
       return Update(newState);
+    }else if(type === SET_USERNAME){
+      const {payload:name} = action;
+      const newState = {...prevState, name};
+      return Update(newState);
     }
 }
 
@@ -27,6 +31,7 @@ export const AppProvider = ({ children }) => {
   const [store, dispatch] = useReducerWithSideEffects(reducer, {
     jwtToken,
     pk:-1,
+    name:'',
   });
   return (
     <AppContext.Provider value={{ store, dispatch }}>
@@ -40,6 +45,7 @@ export const useAppContext = () => useContext(AppContext);
 // Actions
 const SET_TOKEN = "APP/SET_TOKEN";
 const SET_PK = "APP/SET_PK";
+const SET_USERNAME = "APP/SET_USERNAME";
 
 // Action Creators
 export const setToken = (token) => ({
@@ -49,4 +55,8 @@ export const setToken = (token) => ({
 export const setPK = (pk) => ({
   type: SET_PK,
   payload: pk,
+})
+export const setUsername = (name) => ({
+  type: SET_USERNAME,
+  payload: name,
 })

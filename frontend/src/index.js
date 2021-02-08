@@ -2,16 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import {BrowserRouter} from 'react-router-dom';
 import { AppProvider} from './store';
+import RefreshToken from './component/auth/refresh';
 
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <AppProvider>
-    <React.StrictMode>
+  <BrowserRouter>
+    <AppProvider>
+      {/* <RefreshToken> */}
         <App/>
-    </React.StrictMode>
-  </AppProvider>,
+      {/* </RefreshToken> */}
+    </AppProvider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
