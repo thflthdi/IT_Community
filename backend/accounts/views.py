@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import BasePermission
 
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserPutSerializer
 
 
 class UserAuthenticated(BasePermission):
@@ -47,9 +47,12 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             ipaddress = self.request.META.get('REMOTE_ADDR')
 
-        # password 암호화 저장
-        serializer.save(client_ip=ipaddress,
-                        password=make_password(serializer.validated_data["password"]))
+        serializer.save(client_ip=ipaddress)
+
+    def get_serializer_class(self):
+        if self.request.method in ['PUT', 'PATCH']:
+            return UserPutSerializer
+        return super().get_serializer_class()
 
     @swagger_auto_schema(manual_parameters=[
         openapi.Parameter('Authorization', openapi.IN_HEADER, description="입력: 'JWT [token값]'",
