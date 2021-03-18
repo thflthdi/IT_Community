@@ -1,4 +1,3 @@
-from django.contrib.auth.hashers import make_password
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
